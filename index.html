@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Formulaire de la Gloire — Contact</title>
+    <meta
+      name="description"
+      content="Formulaire de contact ultime — Undertale style"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <canvas id="matrixBg"></canvas>
+    <div class="card" role="application" aria-label="Formulaire de la Gloire">
+      <header>
+        <div class="logo-wrapper">
+          <div class="logo" id="logo">Hilox</div>
+          <div class="logo-reveal">👀 Pssst... tu m’as vu ?</div>
+        </div>
+
+        <div>
+          <h1>Formulaire de la Gloire</h1>
+          <p class="lead">
+            N’oublie pas de chercher les easter eggs et de les explorer !
+          </p>
+        </div>
+      </header>
+
+      <main>
+        <section class="panel" aria-labelledby="form-title">
+          <h2 id="form-title" style="font-size: 11px; margin: 0 0 12px 0">
+            Contactez-nous
+          </h2>
+
+          <form id="gloriousForm" novalidate>
+            <div class="field">
+              <label for="name">Nom *</label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                required
+                placeholder="Votre nom chevaleresque..."
+              />
+            </div>
+            <div class="row">
+              <div class="field" style="flex: 1">
+                <label for="email">Email *</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                  placeholder="ex: NUIT@INFO.com"
+                />
+              </div>
+              <div class="field" style="width: 140px">
+                <label for="subject">Sujet *</label>
+                <input
+                  id="subject"
+                  name="subject"
+                  type="text"
+                  required
+                  placeholder="Sujet"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="message">Message *</label>
+              <textarea
+                id="message"
+                name="message"
+                required
+                placeholder="Écris ici le message qui changera ta vie..."
+              ></textarea>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center">
+              <button class="btn" type="submit" id="submitBtn">Envoyer</button>
+              <div class="kbd-hint">
+                Utilise les flèches pour naviguer — appuie sur Enter pour
+                sélectionner
+              </div>
+            </div>
+          </form>
+
+          <footer>
+            Astuce: tape <strong>INFO</strong> ou <strong>NUIT</strong> pour un
+            easter egg.
+          </footer>
+        </section>
+
+        <aside class="side" aria-hidden="false">
+          <div class="screen" id="logScreen">
+            <div>— État du formulaire :</div>
+            <div id="events" style="margin-top: 8px; color: var(--muted)"></div>
+          </div>
+
+          <div style="display: flex; gap: 12px">
+            <button
+              id="demoFill"
+              class="btn"
+              style="
+                flex: 1;
+                background: linear-gradient(90deg, var(--accent-2), #4ee7c2);
+              "
+            >
+              Démo rapide
+            </button>
+            <button
+              id="clearBtn"
+              class="btn"
+              style="background: linear-gradient(90deg, #9aa2ff, #7b61ff)"
+            >
+              Réinitialiser
+            </button>
+          </div>
+
+          <div style="text-align: center; font-size: 10px; color: var(--muted)">
+            Undertale vibe — clavier recommandé
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <div class="dialog-wrap" id="dialogWrap" aria-hidden="true">
+      <div
+        class="dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="dialogTitle"
+      >
+        <div
+          id="dialogTitle"
+          style="font-size: 12px; margin-bottom: 8px; color: var(--accent)"
+        >
+          Message envoyé
+        </div>
+        <div class="content typewriter" id="dialogContent"></div>
+        <div
+          style="
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+          "
+        >
+          <button
+            id="closeDialog"
+            class="btn"
+            style="background: linear-gradient(90deg, var(--accent), #ffb703)"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="alert-wrap" id="themeAlert" aria-hidden="true">
+      <div class="alert-box" role="alert">
+        <div class="alert-content typewriter" id="alertContent"></div>
+        <div style="margin-top: 12px; text-align: right">
+          <button
+            id="closeAlert"
+            class="btn"
+            style="background: linear-gradient(90deg, var(--accent-2), #06d6a0)"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <canvas
+      id="gold"
+      class="golden"
+      width="800"
+      height="600"
+      aria-hidden="true"
+      style="position: absolute; inset: 0"
+    ></canvas>
+
+    <script type="text/plain" id="server-code">
+      // server.js (example)
+      /*
+      const express = require('express');
+      const bodyParser = require('body-parser');
+      const cors = require('cors');
+      const app = express();
+      app.use(cors());
+      app.use(bodyParser.json());
+
+      app.post('/api/send', (req, res) => {
+        const {name,email,subject,message} = req.body;
+        console.log('GOT MAIL', {name,email,subject});
+        // TODO: integrate with an email service (SendGrid, Mailgun) or store to DB
+        res.json({ok:true, id: Math.random().toString(36).slice(2,9)});
+      });
+
+      app.listen(3000,()=>console.log('server listening on 3000'));
+      */
+    </script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
